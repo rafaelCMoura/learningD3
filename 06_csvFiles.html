@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="js/d3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+
+    <script type="text/javascript">
+      var h = 100
+      var w = 300
+      var ds
+
+      d3.csv("data.csv", function(error, data) {
+        if (error) {
+          console.log(error)
+        } else {
+          console.log(data)
+          ds = data
+        }
+
+        function KPIColor(d) {
+          if (d > 30) return "blue"
+          else if (d <= 30) return "red"
+        }
+        
+        // Area de plotagem
+        
+        var svg = d3.select("body")
+                    .append("svg")
+                      .attr("width", w)
+                      .attr("height", h)
+
+        // Função auxiliar do d3 para criar os dados do path svg
+        // Outros tipos de interpolação: curveLinear curveNatural curveStepAfter 
+        // curveStepBefore
+        
+        var lineObject = d3.line()
+                           .x( (d) => d.x*3 )
+                           .y( (d)=> h-d.y )
+                           .curve( d3.curveStep ) 
+
+        // Adiciona um elemento path ao svg e atribui a saida da função line do d3
+        // ao atributo d da tag path
+        
+        svg.append("path")
+              .attr("d", lineObject(ds))
+              .attr("stroke", "blue")
+              .attr("stroke-width", 2)
+              .attr("fill", "none")
+
+        // Adiciona os rótulos
+        
+        svg.selectAll("text")
+           .data(ds)
+           .enter()
+           .append("text")
+              .text( (d) => d.y )
+              .attr("x", (d) => d.x*3-20 )
+              .attr("y", (d) => h-d.y )
+              .attr("text-anchor", "end")
+              .attr("dy", ".35em")
+              .attr("fill", (d) => KPIColor(d.y) );
+
+      })
+    </script>
+  </body>
+</html>

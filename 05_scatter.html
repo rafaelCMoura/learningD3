@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="js/d3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var altura = 200
+      var largura = 500
+      var margem = 20
+
+      dados = [
+              {"x":10, "y":50, "f":100, "r": 10},
+              {"x":20, "y":80, "f":250, "r": 20},
+              {"x":30, "y":10, "f":230, "r": 40},
+              {"x":40, "y":30, "f":110, "r": 30},
+              {"x":50, "y":60, "f":150, "r": 60},
+              {"x":60, "y":20, "f":50,  "r": 45},
+              {"x":70, "y":90, "f":200, "r": 30},
+             ]
+
+      var svg = d3.select("body")
+                  .append("svg")
+                    .attr("width", largura)
+                    .attr("height", altura)
+                    .style("background-color","silver")
+
+      svg.selectAll("circle")
+         .data(dados)
+         .enter()
+         .append("circle")
+            .attr("cx", (d,i) => i * (largura / dados.length) + margem )
+            .attr("cy", (d) => altura - d.y - 50 )
+            .attr("r", (d) => d.r )
+            .attr("fill", (d) => "rgba(0,0," + d.f + ",0.7)" )
+
+      svg.selectAll("text")
+         .data(dados)
+         .enter()
+         .append("text")
+         .text( (d) => d.f)
+         .attr("x", (d,i) => i * (largura / dados.length) + margem )
+         .attr("y", (d) => altura - d.y - 46 )
+         .attr("fill","white")
+         .attr("text-anchor","middle")
+         .attr("font-family","sans-serif")
+         .attr("font-size","10px")
+    </script>
+  </body>
+</html>
